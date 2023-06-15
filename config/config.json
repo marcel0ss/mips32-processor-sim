@@ -1,0 +1,18 @@
+{
+    "memory": {
+        "capacity": 1024
+    },
+
+    "cache": [
+        {
+            "capacity": 32,
+            "assocativity": 2,
+            "line_size": 16
+        },
+        {
+            "capacity": 64,
+            "assocativity": 2,
+            "line_size": 16
+        }
+    ]
+}
