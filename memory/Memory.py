@@ -22,17 +22,18 @@ class Memory:
             return
         
         # Verify the adress is valid and exists
-        if address in self.cells:
+        if address not in self.cells:
             log.error("Memory address not found while trying READ operation")
             return
         
         # Read the data from memory
         read_data = ""
-        cells_to_read = ARCHITECTURE / 8
+        cells_to_read = ARCHITECTURE // 8
         for cur_addr in range(address, address + cells_to_read):
-            read_data += self.cells[cur_addr]
+            read_data += hex(self.cells[cur_addr])
         
-        self.output = read_data
+        read_data = read_data.replace("0x", "")
+        self.output = int(read_data, 16)
 
     def write(self, address, data):
 
@@ -42,7 +43,7 @@ class Memory:
             return
         
         # Verify the adress is valid and exists
-        if address in self.cells:
+        if address not in self.cells:
             log.error("Memory address not found while trying WRITE operation")
             return
         
@@ -70,7 +71,7 @@ class Memory:
     def __is_aligment_correct(self, address):
         # Convert the address to integer
         int_addr = int(address, 16)
-        div = ARCHITECTURE / 8
+        div = ARCHITECTURE // 8
         # If alignment is correct, the operation output 0, so invert the result
         return not int_addr % div
     

@@ -15,4 +15,5 @@ if __name__ == "__main__":
     print(main_mem.get_data_from_address(1020))
     main_mem.read_en = True
     main_mem.read(1020)
+    print(main_mem.output, hex(main_mem.output))
 

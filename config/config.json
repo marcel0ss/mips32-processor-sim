@@ -17,5 +17,6 @@
         }
     ],
 
-    "architecture": 32
+    "architecture": 32,
+    "endianness": "LITTLE"
 }
