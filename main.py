@@ -17,3 +17,10 @@ if __name__ == "__main__":
     main_mem.read(1020)
     print(main_mem.output, hex(main_mem.output))
 
+    main_mem.write_en = True
+    main_mem.write(1020, 2478525685)
+
+    print(main_mem.get_data_from_address(1020))
+    main_mem.read(1020)
+    print(main_mem.output, hex(main_mem.output))
+

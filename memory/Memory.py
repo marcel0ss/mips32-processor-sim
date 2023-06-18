@@ -53,27 +53,25 @@ class Memory:
                       "Address is missaligned")
             return
 
-        wr_data = data
         # Verify validity of the data to be written
-        if len(data) != ARCHITECTURE:
-            log.warning(f"Data to be written must have a size of {ARCHITECTURE}," +
-                        f"but data received has a size of {len(data)}." +
-                        "Filling up data with zeros")
-            missing_len = ARCHITECTURE - len(data)
-            fixed_data = missing_len*"0" + data
-            wr_data = fixed_data
+        if self.__count_min_bits(data) > ARCHITECTURE:
+            log.error(f"Data to be written must have a size of {ARCHITECTURE}, " +
+                        f"but data received has a size of {self.__count_min_bits(data)}. " +
+                        "Unable to write data")
+            return
 
         # Write data into memory
-        split_wr_data = [wr_data[i:i+8] for i in range(0, len(wr_data), 8)]
-        for i in range(len(split_wr_data)):
-            self.cells[address + i] = split_wr_data[i]
+        cells_to_write = ARCHITECTURE // 8
+        shift_amt = ARCHITECTURE - 8
+        for i in range(cells_to_write):
+            self.cells[address + i] = (data >> shift_amt) & 0xFF
+            shift_amt -= 8
 
     def __is_aligment_correct(self, address):
         # Convert the address to integer
-        int_addr = int(address, 16)
         div = ARCHITECTURE // 8
         # If alignment is correct, the operation output 0, so invert the result
-        return not int_addr % div
+        return not address % div
     
     def init_mem(self, mem_cfg):
         if mem_cfg.start == MEM_EMPTY:
@@ -81,6 +79,16 @@ class Memory:
         elif mem_cfg.start == MEM_RANDOM:
             self.cells = {i:random.randint(0, 255) for i in range(self.capacity)}
         # TODO: Implement starting memory from file
+
+    def __count_min_bits(self, num):
+        if num:
+            it_num = num
+            count = 0
+            while it_num > 0:
+                count += 1
+                it_num >>= 1
+            return count
+        return 1
 
     # TODO: Remove method, testing only
     def get_data_from_address(self, address):
