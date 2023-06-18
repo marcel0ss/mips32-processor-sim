@@ -1,6 +1,7 @@
 {
     "memory": {
-        "capacity": 1024
+        "capacity": 1024,
+        "start": "RANDOM"
     },
 
     "cache": [
@@ -14,5 +15,7 @@
             "assocativity": 2,
             "line_size": 16
         }
-    ]
+    ],
+
+    "architecture": 32
 }
