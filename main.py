@@ -12,6 +12,7 @@ if __name__ == "__main__":
     config_handle.get_configuration()
 
     main_mem = Memory(config_handle.mem_cfg)
-    print(main_mem)
     print(main_mem.get_data_from_address(1020))
+    main_mem.read_en = True
+    main_mem.read(1020)
 

@@ -78,9 +78,7 @@ class Memory:
         if mem_cfg.start == MEM_EMPTY:
             self.cells = {i:0 for i in range(self.capacity)}
         elif mem_cfg.start == MEM_RANDOM:
-            # Calculate the maximum number possible with the architecture size
-            max_num_possible = ((1 << ARCHITECTURE) - 1)
-            self.cells = {i:random.randint(0, max_num_possible) for i in range(self.capacity)}
+            self.cells = {i:random.randint(0, 255) for i in range(self.capacity)}
         # TODO: Implement starting memory from file
 
     # TODO: Remove method, testing only
