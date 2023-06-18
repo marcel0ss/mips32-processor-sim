@@ -10,11 +10,19 @@ MAX_ARCH_SIZE = 64
 MIN_ARCH_SIZE = 8
 DEFAULT_ARCH_SIZE = 32
 
+MEM_INIT_MODES = {
+    "EMPTY": 0,
+    "RANDOM": 1,
+    "FILE": 2
+}
+
+# Variable configurations
+ARCHITECTURE = 32
+
 class Configurator:
 
     def __init__(self, filepath):
         self.filepath = filepath
-        self.architecture = DEFAULT_ARCH_SIZE
         self.mem_cfg = MemoryCfg()
 
 
@@ -40,6 +48,7 @@ class Configurator:
     
     def __configure_memory(self, mem_cfg):
         mem_capacity = mem_cfg["capacity"]
+        mem_init_mode = mem_cfg["start"]
 
         if mem_capacity <= 0:
             log.error("Memory size cannot be negative or zero")
@@ -52,6 +61,14 @@ class Configurator:
             return False
 
         self.mem_cfg.capacity_in_bytes = mem_capacity
+
+        if mem_init_mode in MEM_INIT_MODES:
+            self.mem_cfg.start = MEM_INIT_MODES[mem_init_mode]
+        else:
+            log.warning(f"Memory initialization method {mem_init_mode} is not recognized. " +
+                         "Initializing empty memory. " +
+                         "Valid options are (RANDOM, EMPTY, FILE)")
+
         return True
 
     def __configure_cache(self, cache_cfg):
@@ -59,6 +76,7 @@ class Configurator:
         return True
 
     def __configure_architecture(self, arch):
+        global ARCHITECTURE
         # Verify that the architecture is between the accepted range
         if arch > MAX_ARCH_SIZE or arch < MIN_ARCH_SIZE:
             log.warning(f"Architecture specified is out of bounds ({MIN_ARCH_SIZE} - {MAX_ARCH_SIZE}). " +
@@ -72,4 +90,4 @@ class Configurator:
             return
 
         log.info(f"Architecture set to {arch} bits")
-        self.architecture = arch
+        ARCHITECTURE = arch

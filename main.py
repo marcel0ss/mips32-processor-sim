@@ -13,4 +13,5 @@ if __name__ == "__main__":
 
     main_mem = Memory(config_handle.mem_cfg)
     print(main_mem)
+    print(main_mem.get_data_from_address(1020))
 

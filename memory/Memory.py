@@ -1,6 +1,6 @@
 import logging
 import random
-from config.Configurator import Configurator as cfg
+from config.Configurator import ARCHITECTURE
 from config.MemoryCfg import MEM_EMPTY, MEM_RANDOM, MEM_FROM_FILE
 
 log = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class Memory:
         
         # Read the data from memory
         read_data = ""
-        cells_to_read = cfg.architecture / 8
+        cells_to_read = ARCHITECTURE / 8
         for cur_addr in range(address, address + cells_to_read):
             read_data += self.cells[cur_addr]
         
@@ -54,11 +54,11 @@ class Memory:
 
         wr_data = data
         # Verify validity of the data to be written
-        if len(data) != cfg.architecture:
-            log.warning(f"Data to be written must have a size of {cfg.architecture}," +
+        if len(data) != ARCHITECTURE:
+            log.warning(f"Data to be written must have a size of {ARCHITECTURE}," +
                         f"but data received has a size of {len(data)}." +
                         "Filling up data with zeros")
-            missing_len = cfg.architecture - len(data)
+            missing_len = ARCHITECTURE - len(data)
             fixed_data = missing_len*"0" + data
             wr_data = fixed_data
 
@@ -70,7 +70,7 @@ class Memory:
     def __is_aligment_correct(self, address):
         # Convert the address to integer
         int_addr = int(address, 16)
-        div = cfg.architecture / 8
+        div = ARCHITECTURE / 8
         # If alignment is correct, the operation output 0, so invert the result
         return not int_addr % div
     
@@ -79,9 +79,17 @@ class Memory:
             self.cells = {i:0 for i in range(self.capacity)}
         elif mem_cfg.start == MEM_RANDOM:
             # Calculate the maximum number possible with the architecture size
-            max_num_possible = ((1 << cfg.architecture) - 1)
+            max_num_possible = ((1 << ARCHITECTURE) - 1)
             self.cells = {i:random.randint(0, max_num_possible) for i in range(self.capacity)}
         # TODO: Implement starting memory from file
+
+    # TODO: Remove method, testing only
+    def get_data_from_address(self, address):
+        cells_to_print = ARCHITECTURE // 8
+        print_data = ""
+        for i in range(cells_to_print):
+            print_data += (hex(address + i) + " " + hex(self.cells[address + i])) + "\n"
+        return print_data
 
     def __str__(self):
         print_data = ""
