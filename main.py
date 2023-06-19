@@ -7,12 +7,11 @@ if __name__ == "__main__":
     print("MIPS Processor Simulator")
     logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
-    config = "/home/marcelo/Projects/processor-sim/config/config.json"
+    config = "./config/config.json"
     config_handle = Configurator(config)
     config_handle.get_configuration()
 
     main_mem = Memory(config_handle.mem_cfg)
-    print(main_mem.get_data_from_address(1020))
     main_mem.read_en = True
     main_mem.read(1020)
     print(main_mem.output, hex(main_mem.output))
@@ -20,7 +19,6 @@ if __name__ == "__main__":
     main_mem.write_en = True
     main_mem.write(1020, 2478525685)
 
-    print(main_mem.get_data_from_address(1020))
     main_mem.read(1020)
     print(main_mem.output, hex(main_mem.output))
 

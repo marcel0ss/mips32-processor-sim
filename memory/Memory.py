@@ -9,7 +9,7 @@ class Memory:
 
     def __init__(self, mem_cfg):
         self.capacity = mem_cfg.capacity_in_bytes
-        self.init_mem(mem_cfg)
+        self.__init_mem(mem_cfg)
         self.read_en = False
         self.write_en = False
         self.output = 0
@@ -73,7 +73,7 @@ class Memory:
         # If alignment is correct, the operation output 0, so invert the result
         return not address % div
     
-    def init_mem(self, mem_cfg):
+    def __init_mem(self, mem_cfg):
         if mem_cfg.start == MEM_EMPTY:
             self.cells = {i:0 for i in range(self.capacity)}
         elif mem_cfg.start == MEM_RANDOM:
