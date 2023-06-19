@@ -12,13 +12,16 @@ if __name__ == "__main__":
     config_handle.get_configuration()
 
     main_mem = Memory(config_handle.mem_cfg)
+    print(main_mem)
     main_mem.read_en = True
-    main_mem.read(1020)
+    main_mem.read(0x3fc)
     print(main_mem.output, hex(main_mem.output))
 
+    """
     main_mem.write_en = True
     main_mem.write(1020, 2478525685)
 
     main_mem.read(1020)
     print(main_mem.output, hex(main_mem.output))
+    """
 
