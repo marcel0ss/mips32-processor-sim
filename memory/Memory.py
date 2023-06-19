@@ -90,14 +90,6 @@ class Memory:
             return count
         return 1
 
-    # TODO: Remove method, testing only
-    def get_data_from_address(self, address):
-        cells_to_print = ARCHITECTURE // 8
-        print_data = ""
-        for i in range(cells_to_print):
-            print_data += (hex(address + i) + " " + hex(self.cells[address + i])) + "\n"
-        return print_data
-
     def __str__(self):
         print_data = ""
         for addr, data in self.cells.items():
