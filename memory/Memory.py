@@ -1,7 +1,7 @@
 import logging
 import random
 from config.Configurator import ARCHITECTURE
-from config.MemoryCfg import MEM_EMPTY, MEM_RANDOM, MEM_FROM_FILE
+from config.MemoryCfg import MEM_EMPTY, MEM_RANDOM
 
 log = logging.getLogger(__name__)
 
@@ -59,8 +59,8 @@ class Memory:
         # Verify validity of the data to be written
         if self.__count_min_bits(data) > ARCHITECTURE:
             log.error(
-                f"Data to be written must have a size of {ARCHITECTURE} bits, " +
-                f"but data received has a size of {self.__count_min_bits(data)} bits. " +
+                f"Data to be written must be {ARCHITECTURE} bits, " +
+                f"but data received needs {self.__count_min_bits(data)} bits. " +
                 "Unable to write data")
             return False
 
@@ -90,10 +90,8 @@ class Memory:
             self.cells = {i: 0 for i in range(self.capacity)}
         elif mem_cfg.start == MEM_RANDOM:
             self.cells = {
-                i: random.randint(
-                    0,
-                    255) for i in range(
-                    self.capacity)}
+                i: random.randint(0, 255) 
+                for i in range(self.capacity)}
         # TODO: Implement starting memory from file
 
     def __count_min_bits(self, num):

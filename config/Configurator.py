@@ -48,7 +48,8 @@ class Configurator:
         is_not_pwr_2 = mem_capacity & (mem_capacity - 1)
         if is_not_pwr_2:
             log.error(
-                f"Memory size cannot be of size {mem_capacity}, it must be a power of 2")
+                f"Memory size cannot be of size {mem_capacity}, " +
+                "it must be a power of 2")
             return False
 
         self.mem_cfg.capacity_in_bytes = mem_capacity
@@ -72,7 +73,8 @@ class Configurator:
         # Verify that the architecture is between the accepted range
         if arch > MAX_ARCH_SIZE or arch < MIN_ARCH_SIZE:
             log.warning(
-                f"Architecture specified is out of bounds ({MIN_ARCH_SIZE} - {MAX_ARCH_SIZE}). " +
+                f"Architecture specified is out of bounds " +
+                f"({MIN_ARCH_SIZE} - {MAX_ARCH_SIZE}). " +
                 f"Using the default value of {DEFAULT_ARCH_SIZE}")
             return
 
@@ -80,7 +82,8 @@ class Configurator:
         is_not_pwr_2 = arch & (arch - 1)
         if is_not_pwr_2:
             log.error(
-                f"Architecture must be a power of 2. Using the default archictecture of {DEFAULT_ARCH_SIZE}")
+                f"Architecture must be a power of 2. " +
+                f"Using the default archictecture of {DEFAULT_ARCH_SIZE}")
             return
 
         log.info(f"Architecture set to {arch} bits")
