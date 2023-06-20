@@ -2,6 +2,7 @@ import logging
 import random
 from config.Configurator import ARCHITECTURE
 from config.MemoryCfg import MEM_EMPTY, MEM_RANDOM
+from general.Util import Util
 
 log = logging.getLogger(__name__)
 
@@ -57,10 +58,10 @@ class Memory:
             return False
 
         # Verify validity of the data to be written
-        if self.__count_min_bits(data) > ARCHITECTURE:
+        if Util.count_min_bits(data) > ARCHITECTURE:
             log.error(
                 f"Data to be written must be {ARCHITECTURE} bits, " +
-                f"but data received needs {self.__count_min_bits(data)} bits. " +
+                f"but data received needs {Util.count_min_bits(data)} bits. " +
                 "Unable to write data")
             return False
 
@@ -94,15 +95,6 @@ class Memory:
                 for i in range(self.capacity)}
         # TODO: Implement starting memory from file
 
-    def __count_min_bits(self, num):
-        if num:
-            it_num = num
-            count = 0
-            while it_num > 0:
-                count += 1
-                it_num >>= 1
-            return count
-        return 1
 
     def __str__(self):
         print_data = ""
