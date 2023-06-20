@@ -116,6 +116,4 @@ class TestMemory(unittest.TestCase):
         self.assertEqual(rd_result_oob_upper, False)
 
 
-if __name__ == "__main__":
-    # Run command: python3 -m unittest tests/TestMemory.py
-    unittest.main()
+# Run command: python3 -m unittest tests/TestMemory.py
