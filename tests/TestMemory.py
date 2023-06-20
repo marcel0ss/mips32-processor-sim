@@ -3,16 +3,17 @@ from memory.Memory import Memory
 from config.Configurator import Configurator
 from config.ConfigurationStrings import MIPS32_STANDARD_CONFIG
 
-cfg = Configurator(MIPS32_STANDARD_CONFIG) 
+cfg = Configurator(MIPS32_STANDARD_CONFIG)
 cfg.get_configuration()
 uut = Memory(cfg.mem_cfg)
+
 
 class TestMemory(unittest.TestCase):
 
     def tearDown(self):
         uut.reset_mem()
 
-    # Write operation    
+    # Write operation
 
     def test_valid_write_not_enabled(self):
         uut.write_en = False
@@ -21,7 +22,6 @@ class TestMemory(unittest.TestCase):
         # Try to write data at address 0x3fc
         wr_result = uut.write(wr_addr, wr_data)
         self.assertEqual(wr_result, False)
-
 
     def test_valid_write_enabled(self):
         wr_data = 0xAF0123E4
@@ -34,7 +34,7 @@ class TestMemory(unittest.TestCase):
     def test_invalid_write_invalid_address(self):
         wr_data = 0xAF0123E4
         wr_addr_oob_lower = -1
-        wr_addr_oob_upper = 1025        
+        wr_addr_oob_upper = 1025
         uut.write_en = True
 
         wr_result_oob_lower = uut.write(wr_addr_oob_lower, wr_data)
@@ -43,7 +43,7 @@ class TestMemory(unittest.TestCase):
         wr_result_oob_upper = uut.write(wr_addr_oob_upper, wr_data)
         self.assertEqual(wr_result_oob_upper, False)
 
-    def  test_invalid_write_missaligned(self):
+    def test_invalid_write_missaligned(self):
         wr_data = 0xAF0123E4
         # Missaligned addresses (must be divisible by 4)
         wr_addr1 = 0x1
@@ -93,7 +93,7 @@ class TestMemory(unittest.TestCase):
         rd_addr2 = 0x3fc
         wr_data1 = 0x17FAE301
         wr_data2 = 0x18FA2300
-        
+
         uut.write(rd_addr1, wr_data1)
         rd_result1 = uut.read(rd_addr1)
         self.assertEqual(rd_result1, True)
@@ -106,7 +106,7 @@ class TestMemory(unittest.TestCase):
 
     def test_invalid_read_invalid_address(self):
         wr_addr_oob_lower = -1
-        wr_addr_oob_upper = 1025        
+        wr_addr_oob_upper = 1025
         uut.read_en = True
 
         rd_result_oob_lower = uut.read(wr_addr_oob_lower)

@@ -3,6 +3,7 @@ MEM_EMPTY = 0
 MEM_RANDOM = 1
 MEM_FROM_FILE = 2
 
+
 class MemoryCfg:
 
     def __init__(self):
