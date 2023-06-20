@@ -1,8 +1,9 @@
 import unittest
 from memory.Memory import Memory
 from config.Configurator import Configurator
+from config.ConfigurationStrings import MIPS32_STANDARD_CONFIG
 
-cfg = Configurator("./config/config.json") 
+cfg = Configurator(MIPS32_STANDARD_CONFIG) 
 cfg.get_configuration()
 uut = Memory(cfg.mem_cfg)
 
@@ -111,7 +112,7 @@ class TestMemory(unittest.TestCase):
         rd_result_oob_lower = uut.read(wr_addr_oob_lower)
         self.assertEqual(rd_result_oob_lower, False)
 
-        rd_result_oob_upper = uut.write(wr_addr_oob_upper)
+        rd_result_oob_upper = uut.read(wr_addr_oob_upper)
         self.assertEqual(rd_result_oob_upper, False)
 
 

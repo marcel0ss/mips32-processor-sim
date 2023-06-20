@@ -21,24 +21,14 @@ ARCHITECTURE = 32
 
 class Configurator:
 
-    def __init__(self, filepath):
-        self.filepath = filepath
+    def __init__(self, jstr):
+        self.json_str = jstr
         self.mem_cfg = MemoryCfg()
 
 
     def get_configuration(self):
         # Try to open the JSON configuration file
-        try:
-            str_cfg = open(self.filepath)
-            json_cfg = json.load(str_cfg)
-        except:
-            log.error(f"File in path {self.filepath} does not exists")
-            return False
-        
-        # Finally check that the file is a JSON file
-        if not self.filepath.endswith(".json"):
-            log.error("Configuration file must be a JSON file")
-            return False
+        json_cfg = json.loads(self.json_str)
         
         self.__configure_architecture(json_cfg["architecture"])
         valid_mem_cfg = self.__configure_memory(json_cfg["memory"])
@@ -57,7 +47,7 @@ class Configurator:
         # Verify that the size specified is a power of 2
         is_not_pwr_2 = mem_capacity & (mem_capacity - 1)
         if is_not_pwr_2:
-            log.error("Memory size must be a power of 2")
+            log.error(f"Memory size cannot be of size {mem_capacity}, it must be a power of 2")
             return False
 
         self.mem_cfg.capacity_in_bytes = mem_capacity
