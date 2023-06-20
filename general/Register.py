@@ -4,8 +4,9 @@ from general.Util import Util
 
 log = logging.getLogger(__name__)
 
+
 class Register:
-    
+
     def __init__(self):
         self.data = 0x0
         self.output = 0x0
@@ -22,11 +23,10 @@ class Register:
                 f"but data received needs {Util.count_min_bits(data)} bits. " +
                 "Unable to write data")
             return False
-        
+
         self.data = data
         return True
 
     def reset(self):
         self.data = 0x0
         self.output = 0x0
-
