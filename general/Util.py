@@ -12,3 +12,8 @@ class Util:
     
     def is_not_pwr_of_two(num):
         return num & (num - 1)
+
+    def next_pwr_of_2(num):
+        i = 1
+        while i < num: i *= 2
+        return i
