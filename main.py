@@ -9,3 +9,5 @@ if __name__ == "__main__":
 
     config_handle = Configurator(MIPS32_STANDARD_CONFIG)
     config_handle.get_configuration()
+
+# autopep8 --in-place --aggressive --aggressive <filename>
