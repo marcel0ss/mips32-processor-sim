@@ -6,9 +6,13 @@ class Mux:
 
     def __init__(self, num_inputs):
         # Create an array that holds the value of the inputs
-        self.inputs = [0x0 for _ in range(num_inputs)]
+        self.inputs = self.__init_mux(num_inputs)
         self.select = 0x0
         self.output = 0x0
+
+    def __init_mux(self, num_inputs):
+
+        self.inputs = [0x0 for _ in range(num_inputs)]
         
 
     def select(self, input):

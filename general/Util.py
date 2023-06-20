@@ -9,3 +9,6 @@ class Util:
                 it_num >>= 1
             return count
         return 1
+    
+    def is_not_pwr_of_two(num):
+        return num & (num - 1)
