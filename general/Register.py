@@ -11,10 +11,6 @@ class Register:
         self.data = 0x0
         self.output = 0x0
 
-    def read(self):
-        self.output = self.data
-        return True
-
     def write(self, data):
         # Verify validity of the data to be written
         if Util.count_min_bits(data) > ARCHITECTURE:
