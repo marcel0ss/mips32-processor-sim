@@ -3,6 +3,7 @@ from general.Register import Register
 
 uut = Register()
 
+
 class TestRegister(unittest.TestCase):
 
     def tearDown(self):
@@ -16,7 +17,7 @@ class TestRegister(unittest.TestCase):
         # Write new value
         wr_result = uut.write(wr_data)
         self.assertEqual(wr_result, True)
-        
+
         # Verify actual written value
         uut.read()
         self.assertEqual(uut.output, wr_data)
@@ -27,7 +28,7 @@ class TestRegister(unittest.TestCase):
         # Try to write invalid data
         wr_result = uut.write(wr_data)
         self.assertEqual(wr_result, False)
-        
+
         # Verify no value was actually written
         uut.read()
         self.assertEqual(uut.output, 0x0)

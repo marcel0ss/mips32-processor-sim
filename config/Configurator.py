@@ -1,6 +1,7 @@
 import logging
 import json
 from .MemoryCfg import MemoryCfg
+from general.Util import Util
 
 # Logging
 log = logging.getLogger(__name__)
@@ -45,8 +46,7 @@ class Configurator:
             return False
 
         # Verify that the size specified is a power of 2
-        is_not_pwr_2 = mem_capacity & (mem_capacity - 1)
-        if is_not_pwr_2:
+        if Util.is_not_pwr_of_two(mem_capacity):
             log.error(
                 f"Memory size cannot be of size {mem_capacity}, " +
                 "it must be a power of 2")
@@ -79,8 +79,7 @@ class Configurator:
             return
 
         # Verify that the architecture specified is a power of 2
-        is_not_pwr_2 = arch & (arch - 1)
-        if is_not_pwr_2:
+        if Util.is_not_pwr_of_two(arch):
             log.error(
                 "Architecture must be a power of 2. " +
                 f"Using the default archictecture of {DEFAULT_ARCH_SIZE}")
