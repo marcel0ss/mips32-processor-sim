@@ -17,6 +17,7 @@ class Fetch:
         self.mux = Mux(2)
         self.pc = Register()
         self.imem = Memory(imem_cfg)
+        print(self.imem)
 
         # Inputs
         self.jump_addr = 0x0
@@ -39,6 +40,8 @@ class Fetch:
 
         # Mux 0 -> next instr, no jump
         # Mux 1 -> jump to address
+        self.mux.set_input(MUX_NEXT_ADDR_IN, self.next_addr)
+        self.mux.set_input(MUX_JUMP_ADDR_IN, self.jump_addr)
         self.mux.select(self.mux_sel)
 
         log.info(f"Reading from MUX input number {self.mux.select_ctrl}")
@@ -64,6 +67,15 @@ class Fetch:
 
         # Update fetch stage outputs
         self.next_instr = self.imem.output
+
+    def reset(self):
+        self.mux = Mux(2)
+        self.pc = Register()
+        self.jump_addr = 0x0
+        self.mux_sel = 0x0
+        self.next_instr = 0x0
+        self.next_addr = 0x0
+        self.eop = False
 
     def __str__(self):
         output_print = (f"Next Instr: {hex(self.next_instr)} " +
