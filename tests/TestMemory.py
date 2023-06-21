@@ -4,8 +4,8 @@ from config.Configurator import Configurator
 from config.ConfigurationStrings import MIPS32_STANDARD_CONFIG
 
 cfg = Configurator(MIPS32_STANDARD_CONFIG)
-cfg.get_configuration()
-uut = Memory(cfg.mem_cfg)
+cfg.configure()
+uut = Memory(cfg.dmem_cfg)
 
 
 class TestMemory(unittest.TestCase):

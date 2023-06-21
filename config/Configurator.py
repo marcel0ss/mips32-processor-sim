@@ -25,19 +25,21 @@ class Configurator:
 
     def __init__(self, jstr):
         self.json_str = jstr
-        self.mem_cfg = MemoryCfg()
+        self.dmem_cfg = MemoryCfg()
+        self.imem_cfg = MemoryCfg()
 
-    def get_configuration(self):
+    def configure(self):
         # Try to open the JSON configuration file
         json_cfg = json.loads(self.json_str)
 
         self.__configure_architecture(json_cfg["architecture"])
-        valid_mem_cfg = self.__configure_memory(json_cfg["memory"])
+        valid_imem_cfg = self.__configure_memory(json_cfg["imemory"], self.imem_cfg)
+        valid_dmem_cfg = self.__configure_memory(json_cfg["dmemory"], self.dmem_cfg)
         valid_cache_cfg = self.__configure_cache(json_cfg["cache"])
 
-        return valid_mem_cfg and valid_cache_cfg
+        return valid_dmem_cfg and valid_imem_cfg and valid_cache_cfg
 
-    def __configure_memory(self, mem_cfg):
+    def __configure_memory(self, mem_cfg, mem):
         mem_capacity = mem_cfg["capacity"]
         mem_init_mode = mem_cfg["start"]
 
@@ -52,10 +54,10 @@ class Configurator:
                 "it must be a power of 2")
             return False
 
-        self.mem_cfg.capacity_in_bytes = mem_capacity
+        mem.capacity_in_bytes = mem_capacity
 
         if mem_init_mode in MEM_INIT_MODES:
-            self.mem_cfg.start = MEM_INIT_MODES[mem_init_mode]
+            mem.start = MEM_INIT_MODES[mem_init_mode]
         else:
             log.warning(
                 f"Memory initialization method {mem_init_mode} is not recognized. " +
