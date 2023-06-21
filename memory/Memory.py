@@ -91,10 +91,9 @@ class Memory:
             self.cells = {i: 0 for i in range(self.capacity)}
         elif mem_cfg.start == MEM_RANDOM:
             self.cells = {
-                i: random.randint(0, 255) 
+                i: random.randint(0, 255)
                 for i in range(self.capacity)}
         # TODO: Implement starting memory from file
-
 
     def __str__(self):
         print_data = ""
