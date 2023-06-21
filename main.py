@@ -2,7 +2,6 @@ import logging
 import os
 from config.Configurator import Configurator
 from config.ConfigurationStrings import MIPS32_STANDARD_CONFIG
-from fetch.Fetch import Fetch
 
 if __name__ == "__main__":
     print("MIPS Processor Simulator")
