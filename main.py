@@ -18,4 +18,12 @@ if __name__ == "__main__":
 
     fetch.run_fetch()
 
+    fetch.run_fetch()
+
+    fetch.run_fetch()
+
+    fetch.run_fetch()
+
+    fetch.run_fetch()
+
 # autopep8 --in-place --aggressive --aggressive <filename>

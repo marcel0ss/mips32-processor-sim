@@ -3,6 +3,7 @@ from general.Mux import Mux
 from general.Register import Register
 from memory.Memory import Memory
 from config.Configurator import ARCHITECTURE
+from memory.Memory import MEM_ADDRESS_NOT_FOUND
 
 log = logging.getLogger(__name__)
 
@@ -27,7 +28,15 @@ class Fetch:
         # Input/Output
         self.next_addr = 0x0
 
+        # Signal to indicate end of program
+        self.eop = False
+
     def run_fetch(self):
+
+        if self.eop:
+            log.info("No more instructions found. Reached end of program")
+            return
+
         # Mux 0 -> next instr, no jump
         # Mux 1 -> jump to address
         self.mux.select(self.mux_sel)
@@ -43,7 +52,12 @@ class Fetch:
 
         # Read instruction at given address from imem
         self.imem.read_en = True
-        self.imem.read(self.pc.data)
+        mem_rd_ret = self.imem.read(self.pc.data)
+
+        if mem_rd_ret == MEM_ADDRESS_NOT_FOUND:
+            # Assume that when the address is not found, we have reached eop
+            self.eop = True
+            return
 
         log.info(f"Reading next instruction at address {hex(self.pc.data)}. " +
                  f"Found instruction {hex(self.imem.output)}")
