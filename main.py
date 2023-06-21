@@ -11,19 +11,5 @@ if __name__ == "__main__":
     config_handle = Configurator(MIPS32_STANDARD_CONFIG)
     config_handle.configure()
 
-    fetch = Fetch(config_handle.imem_cfg)
-    print(fetch.imem)
-
-    fetch.run_fetch()
-
-    fetch.run_fetch()
-
-    fetch.run_fetch()
-
-    fetch.run_fetch()
-
-    fetch.run_fetch()
-
-    fetch.run_fetch()
-
 # autopep8 --in-place --aggressive --aggressive <filename>
+# python3 -m unittest tests/Test*.py

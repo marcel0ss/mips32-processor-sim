@@ -10,6 +10,8 @@ log = logging.getLogger(__name__)
 # Global constants
 MUX_NEXT_ADDR_IN = 0
 MUX_JUMP_ADDR_IN = 1
+
+
 class Fetch:
 
     def __init__(self, imem_cfg):
@@ -17,12 +19,11 @@ class Fetch:
         self.mux = Mux(2)
         self.pc = Register()
         self.imem = Memory(imem_cfg)
-        print(self.imem)
 
         # Inputs
         self.jump_addr = 0x0
         self.mux_sel = 0x0
-        
+
         # Outputs
         self.next_instr = 0x0
 
@@ -48,7 +49,7 @@ class Fetch:
 
         # Set the address in the PC
         self.pc.write(self.mux.output)
-        
+
         # Update next address to be read from imem
         self.next_addr = self.next_addr + (ARCHITECTURE // 8)
         self.mux.set_input(MUX_NEXT_ADDR_IN, self.next_addr)
@@ -81,7 +82,3 @@ class Fetch:
         output_print = (f"Next Instr: {hex(self.next_instr)} " +
                         f"Next Address: {hex(self.next_addr)}")
         return output_print
-
-
-
-    
