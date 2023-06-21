@@ -1,6 +1,11 @@
 MIPS32_STANDARD_CONFIG = '''{
-    "memory": {
+    "dmemory": {
         "capacity": 1024,
+        "start": "RANDOM"
+    },
+
+    "imemory": {
+        "capacity": 16,
         "start": "RANDOM"
     },
 

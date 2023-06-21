@@ -19,8 +19,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(wr_result, True)
 
         # Verify actual written value
-        uut.read()
-        self.assertEqual(uut.output, wr_data)
+        self.assertEqual(uut.data, wr_data)
 
     def test_invalid_write_invalid_data(self):
         wr_data = 0xAA761F90A1
@@ -30,5 +29,4 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(wr_result, False)
 
         # Verify no value was actually written
-        uut.read()
-        self.assertEqual(uut.output, 0x0)
+        self.assertEqual(uut.data, 0x0)

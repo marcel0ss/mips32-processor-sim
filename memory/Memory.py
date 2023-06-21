@@ -6,6 +6,13 @@ from general.Util import Util
 
 log = logging.getLogger(__name__)
 
+# Memory return codes
+MEM_SUCCESS = 0
+MEM_RD_NOT_ENABLE = 1
+MEM_ADDRESS_NOT_FOUND = 2
+MEM_WR_NOT_ENABLE = 3
+MEM_DATA_MISSALIGNED = 4
+MEM_DATA_INVALID = 5
 
 class Memory:
 
@@ -21,12 +28,12 @@ class Memory:
         # If the memory is not enabled for reading, do nothing
         if not self.read_en:
             log.error("Read is not enabled in memory")
-            return False
+            return MEM_RD_NOT_ENABLE
 
         # Verify the adress is valid and exists
         if address not in self.cells:
             log.error("Memory address not found while trying READ operation")
-            return False
+            return MEM_ADDRESS_NOT_FOUND
 
         # Read the data from memory
         read_data = 0x0
@@ -36,26 +43,26 @@ class Memory:
             read_data <<= 8
 
         self.output = (read_data >> 8)
-        return True
+        return MEM_SUCCESS
 
     def write(self, address, data):
 
         # If the memory is not enabled for writing, do nothing
         if not self.write_en:
             log.error("Write is not enabled in memory")
-            return False
+            return MEM_WR_NOT_ENABLE
 
         # Verify the adress is valid and exists
         if address not in self.cells:
             log.error(
                 f"Memory address {hex(address)} not found while trying WRITE operation")
-            return False
+            return MEM_ADDRESS_NOT_FOUND
 
         # Verify correct alignment
         if not self.__is_aligment_correct(address):
             log.error("Write operation could not be performed. " +
                       "Address is missaligned")
-            return False
+            return MEM_DATA_MISSALIGNED
 
         # Verify validity of the data to be written
         if Util.count_min_bits(data) > ARCHITECTURE:
@@ -63,7 +70,7 @@ class Memory:
                 f"Data to be written must be {ARCHITECTURE} bits, " +
                 f"but data received needs {Util.count_min_bits(data)} bits. " +
                 "Unable to write data")
-            return False
+            return MEM_DATA_INVALID
 
         # Write data into memory
         cells_to_write = ARCHITECTURE // 8
@@ -72,7 +79,7 @@ class Memory:
             self.cells[address + i] = (data >> shift_amt) & 0xFF
             shift_amt -= 8
 
-        return True
+        return MEM_SUCCESS
 
     def reset_mem(self):
         self.read_en = False
