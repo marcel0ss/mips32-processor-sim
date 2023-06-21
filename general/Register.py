@@ -9,7 +9,6 @@ class Register:
 
     def __init__(self):
         self.data = 0x0
-        self.output = 0x0
 
     def write(self, data):
         # Verify validity of the data to be written
