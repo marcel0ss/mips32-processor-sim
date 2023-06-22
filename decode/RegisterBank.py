@@ -26,8 +26,8 @@ class RegisterBank:
         self.r2_output = 0x0
         
     def read_registers(self):
-        self.r1_output = self.registers[self.rd1]
-        self.r2_output = self.registers[self.rd2]
+        self.r1_output = self.registers[self.rd1].data
+        self.r2_output = self.registers[self.rd2].data
 
     def set_input_register(self, rd1, rd2, wr):
         if rd1 >= MIPS_NUM_REGISTERS or rd2 > MIPS_NUM_REGISTERS \
@@ -56,5 +56,5 @@ class RegisterBank:
                       f"Data is larger than {ARCHITECTURE} bits")
             return
         
-        self.registers[self.wr_reg] = wr_data
+        self.registers[self.wr_reg].data = wr_data
         
