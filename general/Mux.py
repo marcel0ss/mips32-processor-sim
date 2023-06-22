@@ -55,7 +55,7 @@ class Mux:
     def select(self, sel):
 
         if sel >= len(self.inputs) or sel < 0:
-            log.error(f"Select signal is invalid ({input}). " +
+            log.error(f"Select signal is invalid ({sel}). " +
                       f"Valid options are from 0 to {len(self.inputs) - 1}. " +
                       "Signal value remains unchanged")
             return
