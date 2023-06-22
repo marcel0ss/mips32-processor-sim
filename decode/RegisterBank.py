@@ -17,9 +17,6 @@ class RegisterBank:
         # Inputs
         self.rd1 = 0x0
         self.rd2 = 0x0
-        self.wr_reg = 0x0
-        self.wr_data = 0x0
-        self.wr_en = False
 
         # Outputs
         self.r1_output = 0x0
@@ -29,9 +26,8 @@ class RegisterBank:
         self.r1_output = self.registers[self.rd1].data
         self.r2_output = self.registers[self.rd2].data
 
-    def set_input_register(self, rd1, rd2, wr):
-        if rd1 >= MIPS_NUM_REGISTERS or rd2 > MIPS_NUM_REGISTERS \
-           or wr > MIPS_NUM_REGISTERS:
+    def set_input_register(self, rd1, rd2):
+        if rd1 >= MIPS_NUM_REGISTERS or rd2 > MIPS_NUM_REGISTERS:
             log.error("Unable to set read or write register address. " +
                       f"An invalid register address was found. " +
                       f"Values must be within the range 0 - {MIPS_NUM_REGISTERS - 1}. " +
@@ -40,12 +36,11 @@ class RegisterBank:
         
         self.rd1 = rd1
         self.rd2 = rd2
-        self.wr_reg = wr
 
-    def write_register(self, wr_data):
+    def write_register(self, wr_reg, wr_data, wr_en):
         
         # Verify write enable signal is active
-        if not self.wr_en:
+        if not wr_en:
             log.error("Unable to write register. " +
                       "Write is not enabled")
             return
@@ -56,7 +51,7 @@ class RegisterBank:
                       f"Data is larger than {ARCHITECTURE} bits")
             return
         
-        self.registers[self.wr_reg].write(wr_data)
+        self.registers[wr_reg].write(wr_data)
 
     def __str__(self):
         return (f"rd1 = {self.rd1}\n" +
