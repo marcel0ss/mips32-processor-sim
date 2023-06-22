@@ -21,7 +21,7 @@ class TestRegisterBank(unittest.TestCase):
         ir = 0x20 # Invalid
         r1 = 0xF
 
-        uut.set_input_register(ir, r1)
+        uut.read_registers(ir, r1)
 
         # Verify that the register addresses were not changed
         self.assertNotEqual(ir, uut.rd1)
@@ -32,7 +32,7 @@ class TestRegisterBank(unittest.TestCase):
         r1 = 0x1F
         r2 = 0x0
 
-        uut.set_input_register(r1, r2)
+        uut.read_registers(r1, r2)
 
         # Verify that the register addresses changed
         self.assertEqual(r1, uut.rd1)

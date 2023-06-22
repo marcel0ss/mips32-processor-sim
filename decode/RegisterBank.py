@@ -22,11 +22,7 @@ class RegisterBank:
         self.r1_output = 0x0
         self.r2_output = 0x0
         
-    def read_registers(self):
-        self.r1_output = self.registers[self.rd1].data
-        self.r2_output = self.registers[self.rd2].data
-
-    def set_input_register(self, rd1, rd2):
+    def read_registers(self, rd1, rd2):
         if rd1 >= MIPS_NUM_REGISTERS or rd2 > MIPS_NUM_REGISTERS:
             log.error("Unable to set read or write register address. " +
                       f"An invalid register address was found. " +
@@ -36,6 +32,9 @@ class RegisterBank:
         
         self.rd1 = rd1
         self.rd2 = rd2
+        
+        self.r1_output = self.registers[rd1].data
+        self.r2_output = self.registers[rd2].data
 
     def write_register(self, wr_reg, wr_data, wr_en):
         
