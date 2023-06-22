@@ -43,7 +43,3 @@ class TestDecode(unittest.TestCase):
         
         # Verify the data was written in the register
         self.assertEqual(uut.reg_bank.registers[uut.wr_reg].data, 0x0)
-
-    
-        
-
