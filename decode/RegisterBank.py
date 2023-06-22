@@ -56,5 +56,10 @@ class RegisterBank:
                       f"Data is larger than {ARCHITECTURE} bits")
             return
         
-        self.registers[self.wr_reg].data = wr_data
+        self.registers[self.wr_reg].write(wr_data)
+
+    def __str__(self):
+        return (f"rd1 = {self.rd1}\n" +
+                f"rd2 = {self.rd2}\n" +
+                f"wr_reg = {self.wr_reg}")
         
