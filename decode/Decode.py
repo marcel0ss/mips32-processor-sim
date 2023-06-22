@@ -40,9 +40,11 @@ class Decode:
         # Break down the instruction
         self.opcode = self.instruction >> (MIPS_INSTR_LEN - OPCODE_LEN)
         rd1 = \
-            (self.instruction & 0x3E00000) >> (REGISTER_LEN*2 + SHIFT_AMT_LEN + FUNCTION_LEN)
+            (self.instruction & 0x3E00000) >> \
+            (REGISTER_LEN*2 + SHIFT_AMT_LEN + FUNCTION_LEN)
         rd2 = \
-            (self.instruction & 0x1F0000) >> (REGISTER_LEN + SHIFT_AMT_LEN + FUNCTION_LEN)
+            (self.instruction & 0x1F0000) >> \
+            (REGISTER_LEN + SHIFT_AMT_LEN + FUNCTION_LEN)
         self.imm = (self.instruction & 0xFFFF)
         self.wr_reg = \
             (self.instruction & 0xF800) >> (SHIFT_AMT_LEN + FUNCTION_LEN)

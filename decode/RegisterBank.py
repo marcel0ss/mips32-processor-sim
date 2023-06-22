@@ -26,7 +26,8 @@ class RegisterBank:
         if rd1 >= MIPS_NUM_REGISTERS or rd2 > MIPS_NUM_REGISTERS:
             log.error("Unable to set read or write register address. " +
                       "An invalid register address was found. " +
-                      f"Values must be within the range 0 - {MIPS_NUM_REGISTERS - 1}. " +
+                      "Values must be within the range " +
+                      f"0 - {MIPS_NUM_REGISTERS - 1}. " +
                       "Values will remain unchanged")
             return
         
