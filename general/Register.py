@@ -25,3 +25,6 @@ class Register:
     def reset(self):
         self.data = 0x0
         self.output = 0x0
+
+    def __str__(self):
+        return hex(self.data)
