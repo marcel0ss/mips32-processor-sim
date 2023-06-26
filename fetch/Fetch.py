@@ -2,6 +2,7 @@ import logging
 from general.Mux import Mux
 from general.Register import Register
 from memory.Memory import Memory
+from .Ifid_reg import IFID
 from config.Configurator import ARCHITECTURE
 from memory.Memory import MEM_ADDRESS_NOT_FOUND
 
@@ -68,6 +69,8 @@ class Fetch:
 
         # Update fetch stage outputs
         self.next_instr = self.imem.output
+
+        return IFID(self.next_instr, self.next_addr)
 
     def reset(self):
         self.mux = Mux(2)

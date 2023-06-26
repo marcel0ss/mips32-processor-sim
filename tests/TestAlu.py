@@ -13,17 +13,16 @@ class TestAlu(unittest.TestCase):
         uut.zero = False
 
     def test_add(self):
-        uut.in1 = 0x1AF0 # 6896
-        uut.in2 = 0xE1D3 # 57811
-        uut.alu_op = 0x1 # Add
+        uut.in1 = 0x1AF0 
+        uut.in2 = 0xE1D3 
+        uut.alu_op = 0x1
         uut.execute_operation()
         
-        # Verify correct results
         self.assertEqual(uut.alu_output, 0xFCC3)
     
     def test_and(self):
-        uut.in1 = 0x1AF0 # 6896
-        uut.in2 = 0xE1D3 # 57811
+        uut.in1 = 0x1AF0 
+        uut.in2 = 0xE1D3
         uut.alu_op = 0x2
         uut.execute_operation()
 
