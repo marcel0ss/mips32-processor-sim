@@ -17,8 +17,8 @@ class ALU:
     def execute_operation(self):
 
         match self.alu_op:
-            # Add / Addu / Addi / Addiu
-            case [0x20, 0x21, 0x8, 0x9]:
+            # Add / Addu / Addi / Addiu / Lw / Sw
+            case [0x20, 0x21, 0x23, 0x2B, 0x8, 0x9]:
                 self.alu_output = self.in1 + self.in2
             # And / Andi
             case [0x24, 0xC]:
@@ -36,11 +36,26 @@ class ALU:
             case 0x7:
                 self.alu_output = self.in2 >> self.in1
             # Sub / Subu
-            case [0x22, 0x23]:
+            case [0x22]:
                 self.alu_output = self.in1 = self.in2
             # Xor / Xori
             case [0x26, 0xE]:
                 self.alu_output = self.in1 ^ self.in2
+            # Slt / Sltu / Slti
+            case [0x2A, Ox29, 0xA]:
+                self.alu_output = self.in1 < self.in2
+            # Beq
+            case 0x4:
+                self.alu_output = abs(self.in1 - self.in2)
+            # Bgtz
+            case 0x7:
+                self.alu_output = not (self.in1 > 0)
+            # Blez
+            case 0x6:
+                self.alu_output = not (self.in1 <= 0)
+            # Bne
+            case 0x5:
+                self.alu_output = not (self.in1 != self.in2)
 
         if not self.alu_output:
             self.zero = True
