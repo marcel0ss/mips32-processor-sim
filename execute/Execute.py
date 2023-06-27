@@ -44,5 +44,7 @@ class Execute:
         exmem.wr_reg_en = idex.wr_reg_en
         exmem.jump_en = idex.jump_en
 
+        return exmem
+
 
 
