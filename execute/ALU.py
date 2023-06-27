@@ -2,6 +2,20 @@ import logging
 
 log = logging.getLogger(__name__)
 
+ALU_ADD_OP = 0x1
+ALU_AND_OP = 0x2
+ALU_NOR_OP = 0x3
+ALU_OR_OP = 0x4
+ALU_SLLV_OP = 0x5
+ALU_SRAV_OP = 0x6
+ALU_SUB_OP = 0x7
+ALU_XOR_OP = 0x8
+ALU_SLT_OP = 0x9
+ALU_BEQ_OP = 0xA
+ALU_BGTZ_OP = 0xB
+ALU_BLEZ_OP = 0xC
+ALU_BNE_OP = 0xD
+
 class ALU:
 
     def __init__(self):

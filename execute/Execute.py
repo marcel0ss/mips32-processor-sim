@@ -27,16 +27,13 @@ class Execute:
         self.alu.in1 = idex.rd1_data
         self.alu.in2 = self.alu_in_mux.output
 
-        # Set jump address
-        jmp_addr = idex.next_instr_addr + \
-                    (idex.sigext_imm << 2)
-
         # Execute
         self.alu.execute_operation()
 
         # Set up signals for next stage
         exmem = EXMEM()
-        exmem.shifted_addr = jmp_addr
+        exmem.shifted_addr = idex.next_instr_addr + \
+                            (idex.sigext_imm << 2)
         exmem.alu_zero = self.alu.zero
         exmem.alu_output = self.alu.alu_output
         exmem.rd2_data = idex.rd2_data
