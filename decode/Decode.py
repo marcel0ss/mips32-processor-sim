@@ -1,7 +1,7 @@
 import logging
 from .RegisterBank import RegisterBank
+from .ControlUnit import ControlUnit
 from .Idex_reg import IDEX
-from execute.ALU import *
 
 log = logging.getLogger(__name__)
 
@@ -14,19 +14,12 @@ IMMEDIATE_LEN = 16
 JUMP_ADDR_LEN = 26
 MIPS_INSTR_LEN = 32
 
-JMP_OPCODES = [0b000010, 0b000011, 
-               0b001001, 0b001000]
-
-IMM_OPCODES = [0b001000, 0b001001,
-               0b001100, 0b001101,
-               0b001110, 0b001010,
-               0b001001]
-
 class Decode:
 
     def __init__(self):
         # Components
         self.reg_bank = RegisterBank()
+        self.control_unit = ControlUnit()
 
         # Input
         self.instruction = 0x0
@@ -65,6 +58,8 @@ class Decode:
                  f"shift_amt = {bin(shift_amt)}\n" +
                  f"func_code = {bin(func_code)}")
         
+        self.control_unit.set_signals(opcode, func_code)
+        
         # Immediate sign extension
         sign_bit = (imm) >> 15
         idex.sigext_imm = imm if not sign_bit else imm | 0xFFFF0000
@@ -74,23 +69,17 @@ class Decode:
         idex.rd1_data = self.reg_bank.r1_output
         idex.rd2_data = self.reg_bank.r2_output
 
-        # Set control signals
+        idex.wr_reg_en = self.control_unit.wr_reg_en
+        idex.alu_op = self.control_unit.alu_op
+        idex.jump_en = self.control_unit.jmp_en
+        idex.alu_in2_mux_sel = self.control_unit.alu_in2_mux_sel
+        idex.wr_reg1 = wr_reg
+        idex.wr_reg2 = rd2
+        idex.dest_reg_mux_sel = self.control_unit.dest_reg_mux_sel
+        idex.mem_rd_en = self.control_unit.mem_rd_en
+        idex.mem_wr_en = self.control_unit.mem_wr_en
+        idex.wb_mux_sel = self.control_unit.wb_mux_sel
 
-        # If is an R-type instruction
-        if opcode == 0x0:
-            idex.wr_reg_en = 0x1
-            idex.alu_op = self.__get_alu_op_r(func_code)
-        
-        # TODO: Map all other available instructions
-
-        if opcode in JMP_OPCODES:
-            idex.jump_en = 0x1
-        elif opcode in IMM_OPCODES:
-            idex.alu_in2_mux_sel = 0x1
-
-        # Write register
-        idex.wr_reg = wr_reg
-        
         return idex
 
     def write_register(self, wr_reg, wr_data, wr_en):
@@ -99,34 +88,3 @@ class Decode:
     def reset(self):
         self.reg_bank = RegisterBank()
         self.instruction = 0x0
-
-    def __get_alu_op_r(self, func):
-
-        match func:
-            # Add / Addu
-            case 0b100000 | 0b100001:
-                return ALU_ADD_OP
-            # And
-            case 0b100100:
-                return ALU_AND_OP
-            # Nor
-            case 0b100111:
-                return ALU_NOR_OP
-            # Or
-            case 0b100101:
-                return ALU_OR_OP
-            # Sllv
-            case 0b000100:
-                return ALU_SLLV_OP
-            # Srav
-            case 0b000011:
-                return ALU_SRAV_OP
-            # Sub / Subu
-            case 0b100010 | 0b100011:
-                return ALU_SUB_OP
-            # Xor
-            case 0b100110:
-                return ALU_XOR_OP
-
-
-        
