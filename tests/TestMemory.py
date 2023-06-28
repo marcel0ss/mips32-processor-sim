@@ -16,101 +16,107 @@ class TestMemory(unittest.TestCase):
     # Write operation
 
     def test_valid_write_not_enabled(self):
-        uut.write_en = False
-        wr_data = 0xAF0123E4
-        wr_addr = 0x3fc
+        uut.write_en = 0x0
+        uut.wr_data = 0xAF0123E4
+        uut.address_in = 0x3fc
         # Try to write data at address 0x3fc
-        wr_result = uut.write(wr_addr, wr_data)
+        wr_result = uut.write()
         self.assertEqual(wr_result, MEM_WR_NOT_ENABLE)
 
     def test_valid_write_enabled(self):
-        wr_data = 0xAF0123E4
-        wr_addr = 0x3fc
-        uut.write_en = True
+        uut.wr_data = 0xAF0123E4
+        uut.address_in= 0x3fc
+        uut.write_en = 0x1
         # Try to write data at address 0x3fc
-        wr_result = uut.write(wr_addr, wr_data)
+        wr_result = uut.write()
         self.assertEqual(wr_result, MEM_SUCCESS)
 
     def test_invalid_write_invalid_address(self):
-        wr_data = 0xAF0123E4
-        wr_addr_oob_lower = -1
-        wr_addr_oob_upper = 1025
-        uut.write_en = True
+        uut.wr_data = 0xAF0123E4
+        uut.address_in = -1
+        uut.write_en = 0x1
 
-        wr_result_oob_lower = uut.write(wr_addr_oob_lower, wr_data)
+        wr_result_oob_lower = uut.write()
         self.assertEqual(wr_result_oob_lower, MEM_ADDRESS_NOT_FOUND)
 
-        wr_result_oob_upper = uut.write(wr_addr_oob_upper, wr_data)
+        uut.address_in = 1025
+
+        wr_result_oob_upper = uut.write()
         self.assertEqual(wr_result_oob_upper, MEM_ADDRESS_NOT_FOUND)
 
     def test_invalid_write_missaligned(self):
-        wr_data = 0xAF0123E4
+        uut.wr_data = 0xAF0123E4
         # Missaligned addresses (must be divisible by 4)
-        wr_addr1 = 0x1
-        wr_addr2 = 0x3fb
+        uut.address_in = 0x1
         uut.write_en = True
 
-        wr_result1 = uut.write(wr_addr1, wr_data)
+        wr_result1 = uut.write()
         self.assertEqual(wr_result1, MEM_DATA_MISSALIGNED)
 
-        wr_result2 = uut.write(wr_addr2, wr_data)
+        uut.address_in = 0x3fb
+
+        wr_result2 = uut.write()
         self.assertEqual(wr_result2, MEM_DATA_MISSALIGNED)
 
     def test_invalid_write_overflow(self):
         # Data that cant be handle by 32 bits
-        wr_data1 = 0xDE21AAC0F1
-        wr_data2 = 0xDE21AAC01
-        wr_addr = 0x0
+        uut.wr_data = 0xDE21AAC0F1
+        uut.address_in = 0x0
         uut.write_en = True
 
-        wr_result1 = uut.write(wr_addr, wr_data1)
+        wr_result1 = uut.write()
         self.assertEqual(wr_result1, MEM_DATA_INVALID)
 
-        wr_result2 = uut.write(wr_addr, wr_data2)
+        uut.wr_data = 0xDE21AAC01
+
+        wr_result2 = uut.write()
         self.assertEqual(wr_result2, MEM_DATA_INVALID)
 
     # Read operation
 
     def test_valid_read_not_enabled(self):
-        uut.read_en = False
+        uut.read_en = 0x0
 
-        rd_addr1 = 0x0
-        rd_addr2 = 0x3fc
+        uut.address_in = 0x0
 
-        rd_result1 = uut.read(rd_addr1)
+        rd_result1 = uut.read()
         self.assertEqual(rd_result1, MEM_RD_NOT_ENABLE)
         self.assertEqual(uut.output, 0x0)
 
-        rd_result2 = uut.read(rd_addr2)
+        uut.address_in = 0x3fc
+
+        rd_result2 = uut.read()
         self.assertEqual(rd_result2, MEM_RD_NOT_ENABLE)
         self.assertEqual(uut.output, 0x0)
 
     def test_valid_read_enabled(self):
-        uut.read_en = True
-        uut.write_en = True
+        uut.read_en = 0x1
+        uut.write_en = 0x1
 
-        rd_addr1 = 0x0
-        rd_addr2 = 0x3fc
-        wr_data1 = 0x17FAE301
-        wr_data2 = 0x18FA2300
+        uut.address_in = 0x0
+        uut.wr_data = 0x17FAE301
 
-        uut.write(rd_addr1, wr_data1)
-        rd_result1 = uut.read(rd_addr1)
+        uut.write()
+        rd_result1 = uut.read()
         self.assertEqual(rd_result1, MEM_SUCCESS)
-        self.assertEqual(uut.output, wr_data1)
+        self.assertEqual(uut.output, uut.wr_data)
 
-        uut.write(rd_addr2, wr_data2)
-        rd_result2 = uut.read(rd_addr2)
+        uut.address_in = 0x3fc
+        uut.wr_data = 0x18FA2300
+
+        uut.write()
+        rd_result2 = uut.read()
         self.assertEqual(rd_result2, MEM_SUCCESS)
-        self.assertEqual(uut.output, wr_data2)
+        self.assertEqual(uut.output, uut.wr_data)
 
     def test_invalid_read_invalid_address(self):
-        wr_addr_oob_lower = -1
-        wr_addr_oob_upper = 1025
-        uut.read_en = True
+        uut.address_in = -1
+        uut.read_en = 0x1
 
-        rd_result_oob_lower = uut.read(wr_addr_oob_lower)
+        rd_result_oob_lower = uut.read()
         self.assertEqual(rd_result_oob_lower, MEM_ADDRESS_NOT_FOUND)
 
-        rd_result_oob_upper = uut.read(wr_addr_oob_upper)
+        uut.address_in = 1025
+
+        rd_result_oob_upper = uut.read()
         self.assertEqual(rd_result_oob_upper, MEM_ADDRESS_NOT_FOUND)

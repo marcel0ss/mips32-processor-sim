@@ -33,9 +33,9 @@ class Memory:
 
     def run(self):
         if self.read_en:
-            self.read()
+            return self.read()
         elif self.write_en:
-            self.write()
+            return self.write()
 
     def read(self):
 
