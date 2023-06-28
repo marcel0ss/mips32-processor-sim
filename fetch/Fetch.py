@@ -36,6 +36,8 @@ class Fetch:
 
     def run_fetch(self):
 
+        self.imem.read_en = 0x1
+
         if self.eop:
             log.info("No more instructions found. Reached end of program")
             return
@@ -56,8 +58,8 @@ class Fetch:
         self.mux.set_input(MUX_NEXT_ADDR_IN, self.next_addr)
 
         # Read instruction at given address from imem
-        self.imem.read_en = True
-        mem_rd_ret = self.imem.read(self.pc.data)
+        self.imem.address_in = self.pc.data
+        mem_rd_ret = self.imem.run()
 
         if mem_rd_ret == MEM_ADDRESS_NOT_FOUND:
             # Assume that when the address is not found, we have reached eop
