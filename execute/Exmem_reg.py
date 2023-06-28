@@ -11,4 +11,7 @@ class EXMEM:
         # Control signals
         self.wr_reg_en = 0x0
         self.jump_en = 0x0
+        self.mem_wr_en = 0x0
+        self.mem_rd_en = 0x0
+        self.wb_mux_sel = 0x0
         

@@ -17,58 +17,73 @@ MEM_DATA_INVALID = 5
 class Memory:
 
     def __init__(self, mem_cfg):
+        # Components
         self.capacity = mem_cfg.capacity_in_bytes
+        self.cells = {}
         self.__init_mem(mem_cfg)
-        self.read_en = False
-        self.write_en = False
+        
+        # Output
         self.output = 0x0
 
-    def read(self, address):
+        # Inputs
+        self.read_en = 0x0
+        self.write_en = 0x0
+        self.address_in = 0x0
+        self.wr_data = 0x0
+
+    def run(self):
+        if self.read_en:
+            self.read()
+        elif self.write_en:
+            self.write()
+
+    def read(self):
 
         # If the memory is not enabled for reading, do nothing
         if not self.read_en:
-            log.error("Read is not enabled in memory")
+            self.output = 0x0
+            log.warning("Read is not enabled in memory")
             return MEM_RD_NOT_ENABLE
 
         # Verify the adress is valid and exists
-        if address not in self.cells:
+        if self.address_in not in self.cells:
             log.error("Memory address not found while trying READ operation")
             return MEM_ADDRESS_NOT_FOUND
 
         # Read the data from memory
         read_data = 0x0
         cells_to_read = ARCHITECTURE // 8
-        for cur_addr in range(address, address + cells_to_read):
+        for cur_addr in range(self.address_in, self.address_in + cells_to_read):
             read_data |= self.cells[cur_addr]
             read_data <<= 8
 
         self.output = (read_data >> 8)
         return MEM_SUCCESS
 
-    def write(self, address, data):
+    def write(self):
 
         # If the memory is not enabled for writing, do nothing
         if not self.write_en:
-            log.error("Write is not enabled in memory")
+            log.warning("Write is not enabled in memory")
             return MEM_WR_NOT_ENABLE
 
         # Verify the adress is valid and exists
-        if address not in self.cells:
+        if self.address_in not in self.cells:
             log.error(
-                f"Memory address {hex(address)} not found while trying WRITE operation")
+                f"Memory address {hex(self.address_in)} not found while trying WRITE operation")
             return MEM_ADDRESS_NOT_FOUND
 
         # Verify correct alignment
-        if not self.__is_aligment_correct(address):
+        if not self.__is_aligment_correct(self.address_in):
             log.error("Write operation could not be performed. " +
                       "Address is missaligned")
             return MEM_DATA_MISSALIGNED
 
         # Verify validity of the data to be written
-        if Util.count_min_bits(data) > ARCHITECTURE:
+        if Util.count_min_bits(self.wr_data) > ARCHITECTURE:
             log.error(
                 f"Data to be written must be {ARCHITECTURE} bits, " +
-                f"but data received needs {Util.count_min_bits(data)} bits. " +
+                f"but data received needs {Util.count_min_bits(self.wr_data)} bits. " +
                 "Unable to write data")
             return MEM_DATA_INVALID
 
@@ -76,7 +91,7 @@ class Memory:
         cells_to_write = ARCHITECTURE // 8
         shift_amt = ARCHITECTURE - 8
         for i in range(cells_to_write):
-            self.cells[address + i] = (data >> shift_amt) & 0xFF
+            self.cells[self.address_in + i] = (self.wr_data >> shift_amt) & 0xFF
             shift_amt -= 8
 
         return MEM_SUCCESS

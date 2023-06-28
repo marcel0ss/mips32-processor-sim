@@ -18,8 +18,8 @@ class Execute:
         self.alu_in_mux.set_input(1, idex.sigext_imm)
         self.alu_in_mux.select(idex.alu_in2_mux_sel)
 
-        self.wr_reg_mux.set_input(0, idex.wr_reg)
-        self.wr_reg_mux.set_input(1, idex.shift_amt)
+        self.wr_reg_mux.set_input(0, idex.wr_reg1)
+        self.wr_reg_mux.set_input(1, idex.wr_reg2)
         self.wr_reg_mux.select(idex.dest_reg_mux_sel)
 
         # Set up ALU
@@ -40,6 +40,9 @@ class Execute:
         exmem.wr_reg_addr = self.wr_reg_mux.output
         exmem.wr_reg_en = idex.wr_reg_en
         exmem.jump_en = idex.jump_en
+        exmem.mem_wr_en = idex.mem_wr_en
+        exmem.mem_rd_en = idex.mem_rd_en
+        exmem.wb_mux_sel = idex.wb_mux_sel
 
         return exmem
 
