@@ -55,6 +55,5 @@ class RegisterBank:
 
     def __str__(self):
         return (f"rd1 = {self.rd1}\n" +
-                f"rd2 = {self.rd2}\n" +
-                f"wr_reg = {self.wr_reg}")
+                f"rd2 = {self.rd2}\n")
         

@@ -59,6 +59,10 @@ class Memory:
             read_data <<= 8
 
         self.output = (read_data >> 8)
+
+        log.info(f"Memory read output is {hex(self.output)} " +
+                 f"from address {hex(self.address_in)}")
+
         return MEM_SUCCESS
 
     def write(self):
@@ -125,6 +129,7 @@ class Memory:
                 self.cells[addr+2] = (int_instr&0xFF00) >> 8
                 self.cells[addr+3] = (int_instr&0xFF)
                 addr += 4
+            instr_file.close()
         # Random
         else: 
             self.cells = {
