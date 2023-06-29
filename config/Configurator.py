@@ -43,6 +43,8 @@ class Configurator:
         mem_capacity = mem_cfg["capacity"]
         mem_init_mode = mem_cfg["start"]
 
+        mem.mem_file = mem_cfg["file"]
+
         if mem_capacity <= 0:
             log.error("Memory size cannot be negative or zero")
             return False
