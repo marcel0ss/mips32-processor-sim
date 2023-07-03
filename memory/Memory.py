@@ -1,7 +1,7 @@
 import logging
 import random
 from config.Configurator import ARCHITECTURE
-from config.MemoryCfg import MEM_EMPTY, MEM_RANDOM
+from config.MemoryCfg import MEM_EMPTY, MEM_RANDOM, MEM_FROM_FILE
 from general.Util import Util
 
 log = logging.getLogger(__name__)
@@ -20,6 +20,7 @@ class Memory:
         # Components
         self.capacity = mem_cfg.capacity_in_bytes
         self.cells = {}
+        self.mem_file = mem_cfg.mem_file
         self.__init_mem(mem_cfg)
         
         # Output
@@ -58,6 +59,10 @@ class Memory:
             read_data <<= 8
 
         self.output = (read_data >> 8)
+
+        log.info(f"Memory read output is {hex(self.output)} " +
+                 f"from address {hex(self.address_in)}")
+
         return MEM_SUCCESS
 
     def write(self):
@@ -109,13 +114,27 @@ class Memory:
         return not address % div
 
     def __init_mem(self, mem_cfg):
+        # Empty
         if mem_cfg.start == MEM_EMPTY:
             self.cells = {i: 0 for i in range(self.capacity)}
-        elif mem_cfg.start == MEM_RANDOM:
+        # Read from file
+        elif mem_cfg.start == MEM_FROM_FILE:
+            instr_file = open(self.mem_file, 'r')
+            instructions = instr_file.readlines()
+            addr = 0x0
+            for i in instructions:
+                int_instr = int(i.strip(), 2) 
+                self.cells[addr] = (int_instr&0xFF000000) >> 24
+                self.cells[addr+1] = (int_instr&0xFF0000) >> 16
+                self.cells[addr+2] = (int_instr&0xFF00) >> 8
+                self.cells[addr+3] = (int_instr&0xFF)
+                addr += 4
+            instr_file.close()
+        # Random
+        else: 
             self.cells = {
                 i: random.randint(0, 255)
                 for i in range(self.capacity)}
-        # TODO: Implement starting memory from file
 
     def __str__(self):
         print_data = ""

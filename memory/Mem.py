@@ -32,4 +32,6 @@ class Mem:
         memwb.wr_reg_addr = exmem.wr_reg_addr
         memwb.wb_mux_sel = exmem.wb_mux_sel
 
+        return memwb
+
         

@@ -1,4 +1,6 @@
 import logging
+from general.Util import Util
+from config.Configurator import ARCHITECTURE
 
 log = logging.getLogger(__name__)
 
@@ -82,5 +84,12 @@ class ALU:
                 self.alu_output = 0x0
                 log.error(f"ALU operation code {hex(self.alu_op)} " +
                           "not supported yet. Nothing to do")
+                
+        if Util.count_min_bits(self.alu_output) > ARCHITECTURE:
+            log.warning(f"ALU output ({hex(self.alu_output)}) is larger " +
+                        f"than {ARCHITECTURE} bits. LSb will be truncated")
+            self.alu_output = self.alu_output >> 4
+                
+        log.info(f"Alu output is {hex(self.alu_output)}")
 
         

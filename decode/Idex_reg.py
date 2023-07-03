@@ -22,3 +22,20 @@ class IDEX:
         self.mem_rd_en = 0x0
         self.mem_wr_en = 0x0
         self.wb_mux_sel = 0x0
+
+    def __str__(self):
+        return ("IDEX Register:\n" +
+                f"wr_reg_en = {hex(self.wr_reg_en)}\n" +
+                f"alu_op = {hex(self.alu_op)}\n" +
+                f"jump_en = {hex(self.jump_en)}\n" +
+                f"alu_in2_mux_sel = {hex(self.alu_in2_mux_sel)}\n" +
+                f"dest_reg_mux_sel = {hex(self.dest_reg_mux_sel)}\n" +
+                f"rd1_data = {hex(self.rd1_data)}\n" +
+                f"rd2_data = {hex(self.rd2_data)}\n" +
+                f"sigext_imm = {hex(self.sigext_imm)}\n" +
+                f"wr_reg1 = {hex(self.wr_reg1)}\n" +
+                f"wr_reg2 = {hex(self.wr_reg2)}\n" +
+                f"next_instr_addr = {hex(self.next_instr_addr)}\n" +
+                f"mem_rd_en = {hex(self.mem_rd_en)}\n" +
+                f"mem_wr_en = {hex(self.mem_wr_en)}\n" +
+                f"wb_mux_sel = {hex(self.wb_mux_sel)}")
